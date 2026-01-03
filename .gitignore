@@ -1,0 +1,48 @@
+# we want to ignore build outputs, IDE files, temporary stuff
+
+# ======================
+# Gradle / build files
+# ======================
+/build/
+/.gradle/
+/out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ======================
+# IDE files
+# ======================
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ======================
+# Eclipse (if ever used)
+# ======================
+.settings/
+*.classpath
+*.project
+
+# ======================
+# OS generated files
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# Temporary / generated
+# ======================
+tmp/
+*.tmp
+*.bak
+
+# ======================
+# Spring Boot
+# ======================
+/*.jar
+/*.war
