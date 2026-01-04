@@ -1,52 +1,45 @@
-package com.mhong.jobtracker.domain;
+package com.mhong.jobtracker.dto.request;
 
-import jakarta.persistence.*;
+import com.mhong.jobtracker.domain.ApplicationStatus;
+import com.mhong.jobtracker.domain.WorkType;
 
 import java.time.LocalDate;
 
-@Entity
-public class JobApplication {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class UpdateApplicationRequest {
 
-    @ManyToOne(optional = false) // Many applications can belong to one user
-    @JoinColumn(name = "user_id")  // Column in the JobApplication table
-    private User user;
-
+    private Long appId; //required
     private String company;
     private String role;
     private LocalDate applyDate;
-
-    @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
-
-    @Enumerated(EnumType.STRING)
     private WorkType workType;
-
     private Double salaryMin;
     private Double salaryMax;
     private String notes;
 
-    protected JobApplication(){}
+    // No-args constructor
+    public UpdateApplicationRequest() {}
 
-    public JobApplication(User user, String company, String role){
-        this.user = user;
+    // All-args constructor
+    public UpdateApplicationRequest(Long appId, String company, String role,
+                                    LocalDate applyDate, ApplicationStatus status,
+                                    WorkType workType, Double salaryMin,
+                                    Double salaryMax, String notes) {
+        this.appId = appId;
         this.company = company;
         this.role = role;
-        this.applyDate = LocalDate.now();
-        this.status = ApplicationStatus.APPLIED;
+        this.applyDate = applyDate;
+        this.status = status;
+        this.workType = workType;
+        this.salaryMin = salaryMin;
+        this.salaryMax = salaryMax;
+        this.notes = notes;
     }
+
 
     // Getters and setters
-
-    public Long getId() {return id;}
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public Long getAppId() { return appId; }
+    public void setAppId(Long appId) { this.appId = appId; }
 
     public String getCompany() { return company; }
     public void setCompany(String company) { this.company = company; }
