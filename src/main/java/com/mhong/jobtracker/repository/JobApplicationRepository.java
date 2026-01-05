@@ -4,6 +4,8 @@ import com.mhong.jobtracker.domain.JobApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
     // save(entity) - saves entity
@@ -12,4 +14,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     // delete(entity) - deletes an entity
     // deleteById(id) - deletes by ID
     // existsById(id) - checks if an entity exists
+
+    List<JobApplication> findByUserId(Long userId);
 }
