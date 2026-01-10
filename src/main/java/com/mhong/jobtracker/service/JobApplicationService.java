@@ -7,6 +7,7 @@ import com.mhong.jobtracker.domain.WorkType;
 import com.mhong.jobtracker.dto.request.CreateApplicationRequest;
 import com.mhong.jobtracker.dto.request.UpdateApplicationRequest;
 import com.mhong.jobtracker.repository.JobApplicationRepository;
+import com.mhong.jobtracker.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,12 +19,14 @@ public class JobApplicationService {
 
     // injecting repository
     private final JobApplicationRepository repo;
+    private final UserRepository userRepository;
 
-    public JobApplicationService(JobApplicationRepository repo) {
+    public JobApplicationService(JobApplicationRepository repo, UserRepository userRepository) {
         this.repo = repo;
+        this.userRepository = userRepository;
     }
 
-    private void setOptionalFields(JobApplication app, LocalDate applyDate, ApplicationStatus status, WorkType workType, Double salaryMin, Double salaryMax, String notes, CreateApplicationRequest request) {
+    private void setOptionalFields(JobApplication app, LocalDate applyDate, ApplicationStatus status, WorkType workType, Double salaryMin, Double salaryMax, String notes) {
         if (applyDate != null) app.setApplyDate(applyDate);
         if (status != null) app.setStatus(status);
         if (workType != null) app.setWorkType(workType);
@@ -34,14 +37,17 @@ public class JobApplicationService {
 
     public JobApplication createApplication(CreateApplicationRequest request) {
 
-        //Use UserService or repo to get the associated user id??
-        User user = UserService.getUserId();
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("User doesn't exist"));
 
         JobApplication app = new JobApplication(user, request.getCompany(), request.getRole());
 
-        setOptionalFields(app, request.getApplyDate(), request.getStatus(), request.getWorkType(), request.getSalaryMin(), request.getSalaryMax(), request.getNotes(), request);
+        setOptionalFields(app, request.getApplyDate(), request.getStatus(), request.getWorkType(), request.getSalaryMin(), request.getSalaryMax(), request.getNotes());
+
+        repo.save(app);
 
         return app;
+
     }
 
     public JobApplication updateApplication(UpdateApplicationRequest request) {
@@ -50,20 +56,27 @@ public class JobApplicationService {
 
         if (request.getCompany() != null) app.setCompany(request.getCompany());
         if (request.getRole() != null) app.setRole(request.getRole());
-        setOptionalFields(app, request.getApplyDate(), request.getStatus(), request.getWorkType(), request.getSalaryMin(), request.getSalaryMax(), request.getNotes(), request);
+        setOptionalFields(app, request.getApplyDate(), request.getStatus(), request.getWorkType(), request.getSalaryMin(), request.getSalaryMax(), request.getNotes());
 
         return repo.save(app); // persist changes
     }
 
     public List<JobApplication> getAllApplications(Long userId) {
-        return repo.findByUserId(userId);
+        return repo.findAllByUserId(userId);
     }
 
-    public Optional<JobApplication> getApplicationById(Long id){
-        return repo.findById(id);
+    public JobApplication getApplicationById(Long id){
+       return repo.findById(id)
+               .orElseThrow(() -> new RuntimeException("Application not found"));
     }
 
     public void deleteApplication(Long id){
-        repo.deleteById(id);
+
+        if (repo.existsById(id)) {
+            repo.deleteById(id);
+        }
+        else {
+            throw new RuntimeException("Application not found");
+        }
     }
 }

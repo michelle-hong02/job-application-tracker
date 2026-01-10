@@ -15,5 +15,5 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     // deleteById(id) - deletes by ID
     // existsById(id) - checks if an entity exists
 
-    List<JobApplication> findByUserId(Long userId);
+    List<JobApplication> findAllByUserId(Long userId);
 }
