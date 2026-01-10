@@ -1,5 +1,7 @@
 package com.mhong.jobtracker.service;
 
+import com.mhong.jobtracker.exception.ApplicationNotFoundException;
+import com.mhong.jobtracker.exception.UserNotFoundException;
 import com.mhong.jobtracker.domain.ApplicationStatus;
 import com.mhong.jobtracker.domain.JobApplication;
 import com.mhong.jobtracker.domain.User;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JobApplicationService {
@@ -38,7 +39,7 @@ public class JobApplicationService {
     public JobApplication createApplication(CreateApplicationRequest request) {
 
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User doesn't exist"));
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
 
         JobApplication app = new JobApplication(user, request.getCompany(), request.getRole());
 
@@ -52,7 +53,7 @@ public class JobApplicationService {
 
     public JobApplication updateApplication(UpdateApplicationRequest request) {
         JobApplication app = repo.findById(request.getAppId())
-                .orElseThrow(() -> new RuntimeException("Application not found"));
+                .orElseThrow(() -> new ApplicationNotFoundException(request.getAppId()));
 
         if (request.getCompany() != null) app.setCompany(request.getCompany());
         if (request.getRole() != null) app.setRole(request.getRole());
@@ -67,16 +68,14 @@ public class JobApplicationService {
 
     public JobApplication getApplicationById(Long id){
        return repo.findById(id)
-               .orElseThrow(() -> new RuntimeException("Application not found"));
+               .orElseThrow(() -> new ApplicationNotFoundException(id));
     }
 
     public void deleteApplication(Long id){
 
-        if (repo.existsById(id)) {
-            repo.deleteById(id);
-        }
-        else {
-            throw new RuntimeException("Application not found");
-        }
+        repo.findById(id)
+                .orElseThrow(() -> new ApplicationNotFoundException(id));
+        repo.deleteById(id);
+
     }
 }
