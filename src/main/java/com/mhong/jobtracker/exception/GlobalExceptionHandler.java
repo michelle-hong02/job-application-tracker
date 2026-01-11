@@ -34,6 +34,16 @@ public class GlobalExceptionHandler {
         return body;
     }
 
+    @ExceptionHandler(EmailNotAvailableException.class)
+    @ResponseStatus(HttpStatus.CONFLICT) // 409
+    public Map<String, Object> handleEmailNotAvailable(EmailNotAvailableException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.CONFLICT.value());
+        body.put("error", "Conflict");
+        body.put("message", ex.getMessage());
+        return body;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public Map<String, String> handleValidationExceptions(
