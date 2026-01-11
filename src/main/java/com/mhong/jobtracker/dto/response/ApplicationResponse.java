@@ -3,6 +3,7 @@ package com.mhong.jobtracker.dto.response;
 import com.mhong.jobtracker.domain.ApplicationStatus;
 import com.mhong.jobtracker.domain.JobApplication;
 import com.mhong.jobtracker.domain.WorkType;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
@@ -50,6 +51,7 @@ public class ApplicationResponse {
     }
 
     // Getters only
+    // Note: You need getters to serialize the object to JSON ins repsonses
     public Long getAppId() { return appId; }
     public String getCompany() { return company; }
     public String getRole() { return role; }

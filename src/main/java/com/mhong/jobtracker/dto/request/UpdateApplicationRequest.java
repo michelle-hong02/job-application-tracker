@@ -2,19 +2,30 @@ package com.mhong.jobtracker.dto.request;
 
 import com.mhong.jobtracker.domain.ApplicationStatus;
 import com.mhong.jobtracker.domain.WorkType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
 public class UpdateApplicationRequest {
 
+    @NotNull
     private Long appId; //required
+
     private String company;
     private String role;
     private LocalDate applyDate;
     private ApplicationStatus status;
     private WorkType workType;
+
+    @Positive(message = "salaryMin must be positive")
     private Double salaryMin;
+
+    @Positive(message = "salaryMax must be positive")
     private Double salaryMax;
+
+    @Size(max = 500, message = "Notes cannot exceed 500 characters")
     private String notes;
 
     // No-args constructor
@@ -38,6 +49,7 @@ public class UpdateApplicationRequest {
 
 
     // Getters and setters
+    // Note: Spring requires setters to populate the object when deserializing JSON from a request body
     public Long getAppId() { return appId; }
     public void setAppId(Long appId) { this.appId = appId; }
 

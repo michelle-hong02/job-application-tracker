@@ -5,19 +5,36 @@ import com.mhong.jobtracker.domain.JobApplication;
 import com.mhong.jobtracker.domain.User;
 import com.mhong.jobtracker.domain.WorkType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class CreateApplicationRequest {
 
+    @NotNull
     private Long userId;
+
+    @NotNull
+    @NotBlank
     private String company;
+
+    @NotNull
+    @NotBlank
     private String role;
+
+    @PastOrPresent
     private LocalDate applyDate;
+
     private ApplicationStatus status;
     private WorkType workType;
+
+    @Positive(message = "salaryMin must be positive")
     private Double salaryMin;
+
+    @Positive(message = "salaryMax must be positive")
     private Double salaryMax;
+
+    @Size(max = 500, message = "Notes cannot exceed 500 characters")
     private String notes;
 
     // No-args constructor
@@ -41,6 +58,7 @@ public class CreateApplicationRequest {
 
 
     // Getters and setters
+    // Note: Spring requires setters to populate the object when deserializing JSON from a request body
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 
@@ -67,19 +85,5 @@ public class CreateApplicationRequest {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
-
-    // Method to convert DTO to JobApplication entity
-    public JobApplication createApplication(User user) {
-        JobApplication app = new JobApplication(user, this.company, this.role);
-
-        if (this.applyDate != null) app.setApplyDate(this.applyDate);
-        if (this.status != null) app.setStatus(this.status);
-        if (this.workType != null) app.setWorkType(this.workType);
-        if (this.salaryMin != null) app.setSalaryMin(this.salaryMin);
-        if (this.salaryMax != null) app.setSalaryMax(this.salaryMax);
-        if (this.notes != null) app.setNotes(this.notes);
-
-        return app;
-    }
 
 }

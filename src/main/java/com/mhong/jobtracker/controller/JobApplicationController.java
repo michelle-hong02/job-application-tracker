@@ -5,9 +5,11 @@ import com.mhong.jobtracker.dto.request.CreateApplicationRequest;
 import com.mhong.jobtracker.dto.request.UpdateApplicationRequest;
 import com.mhong.jobtracker.dto.response.ApplicationResponse;
 import com.mhong.jobtracker.service.JobApplicationService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,8 +24,10 @@ public class JobApplicationController {
 
     // Create job application
     @PostMapping
-    public ApplicationResponse create(@RequestBody CreateApplicationRequest request){
-        return ApplicationResponse.fromEntity(service.createApplication(request));
+    public ResponseEntity<ApplicationResponse> create(@Valid  @RequestBody CreateApplicationRequest request){    JobApplication app = service.createApplication(request);
+        return ResponseEntity
+                .created(URI.create("/applications/" + app.getId())) // 201 Created
+                .body(ApplicationResponse.fromEntity(app));
     }
 
     // Get job application by appId
@@ -33,10 +37,12 @@ public class JobApplicationController {
     }
 
     // Update existing job application
-    @PatchMapping
-    public ApplicationResponse update(@RequestBody UpdateApplicationRequest request){
+    @PatchMapping("/{id}")
+    public ApplicationResponse update(@PathVariable Long id, @RequestBody UpdateApplicationRequest request) {
+        request.setAppId(id);
         return ApplicationResponse.fromEntity(service.updateApplication(request));
     }
+
 
     // Delete existing job application by appId
     @DeleteMapping("/{id}")
