@@ -63,6 +63,8 @@ public class JobApplicationService {
     }
 
     public List<JobApplication> getAllApplications(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
         return repo.findAllByUserId(userId);
     }
 

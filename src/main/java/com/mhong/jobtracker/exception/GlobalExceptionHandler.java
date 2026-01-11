@@ -12,16 +12,26 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Note: if you return a Map<Stirng, String>, Spring automatically converts to JSON
     @ExceptionHandler(UserNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND) //404
-    public String handleUserNotFound(UserNotFoundException ex) {
-        return ex.getMessage();
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleUserNotFound(UserNotFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Not Found");
+        body.put("message", ex.getMessage());
+        return body;
     }
+
 
     @ExceptionHandler(ApplicationNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
-    public String handleAppNotFound(ApplicationNotFoundException ex) {
-        return ex.getMessage();
+    public Map<String, Object> handleAppNotFound(ApplicationNotFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "NotFound");
+        body.put("message", ex.getMessage());
+        return body;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
