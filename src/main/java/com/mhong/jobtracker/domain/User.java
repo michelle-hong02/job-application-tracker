@@ -11,52 +11,34 @@ public class User {
     private Long id;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
-    private String password;
+    private String passwordHash;
 
     //protected no-args constructor for JPA
     protected User(){}
 
-    public User(String firstName, String lastName, String email, String password){
+    public User(String firstName, String lastName, String email, String passwordHash){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.passwordHash = passwordHash;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    // Getters and setters
+    // Note: Spring requires setters to populate the object when deserializing JSON from a request body
+    public Long getId() {return id;}
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getFirstName() { return firstName;}
+    public void setFirstName(String firstName) {this.firstName = firstName;}
 
-    public String getEmail() {
-        return email;
-    }
+    public String getLastName() {return lastName;}
+    public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public String getPassword() {
-        return password;
-    }
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
 
-    public Long getId() {
-        return id;
-    }
+    public String getPasswordHash() {return passwordHash;}
+    public void setPasswordHash(String passwordHash) {this.passwordHash = passwordHash;}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
