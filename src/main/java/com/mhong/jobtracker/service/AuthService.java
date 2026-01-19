@@ -3,7 +3,7 @@ package com.mhong.jobtracker.service;
 import com.mhong.jobtracker.domain.User;
 import com.mhong.jobtracker.dto.request.UserLoginRequest;
 import com.mhong.jobtracker.dto.request.UserRegistrationRequest;
-import com.mhong.jobtracker.dto.response.UserRegistrationResponse;
+import com.mhong.jobtracker.dto.response.AuthResponse;
 import com.mhong.jobtracker.exception.EmailNotAvailableException;
 import com.mhong.jobtracker.repository.UserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,7 +24,7 @@ public class AuthService {
         this.encoder = encoder;
     }
 
-    public UserRegistrationResponse registerUser(UserRegistrationRequest request) {
+    public AuthResponse registerUser(UserRegistrationRequest request) {
 
         // Check if email exists
         if(repo.existsByEmail(request.getEmail())) {
@@ -38,7 +38,7 @@ public class AuthService {
 
         repo.save(user);
 
-        return new UserRegistrationResponse(user.getEmail(), user.getFirstName());
+        return new AuthResponse(user.getEmail(), user.getFirstName());
     }
 
     public User authenticate(UserLoginRequest request) {

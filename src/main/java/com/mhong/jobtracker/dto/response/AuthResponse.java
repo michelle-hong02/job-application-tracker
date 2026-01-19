@@ -1,12 +1,12 @@
 package com.mhong.jobtracker.dto.response;
 
-public class UserRegistrationResponse {
+public class AuthResponse {
 
     private final String email;
     private final String firstName;
 
     // All-args constructor
-    public UserRegistrationResponse(String email, String firstName) {
+    public AuthResponse(String email, String firstName) {
         this.email = email;
         this.firstName = firstName;
     }

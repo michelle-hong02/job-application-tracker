@@ -2,7 +2,7 @@ package com.mhong.jobtracker.controller;
 
 import com.mhong.jobtracker.dto.request.UserLoginRequest;
 import com.mhong.jobtracker.dto.request.UserRegistrationRequest;
-import com.mhong.jobtracker.dto.response.UserRegistrationResponse;
+import com.mhong.jobtracker.dto.response.AuthResponse;
 import com.mhong.jobtracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,8 +24,8 @@ public class AuthController {
 
     // Register user
     @PostMapping("/register")
-    public ResponseEntity<UserRegistrationResponse> register(@Valid @RequestBody UserRegistrationRequest request) {
-        UserRegistrationResponse response = service.registerUser(request);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody UserRegistrationRequest request) {
+        AuthResponse response = service.registerUser(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)// 201 Created
                 .body(response);
