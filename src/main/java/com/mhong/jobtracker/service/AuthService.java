@@ -11,14 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class AuthService {
 
     private final PasswordEncoder encoder;
 
     // injecting repository
     private final UserRepository repo;
 
-    public UserService(UserRepository repo, PasswordEncoder encoder) {
+    public AuthService(UserRepository repo, PasswordEncoder encoder) {
         this.repo = repo;
 //        this.jwtService = jwtService;
         this.encoder = encoder;

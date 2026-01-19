@@ -1,10 +1,9 @@
 package com.mhong.jobtracker.controller;
 
-import com.mhong.jobtracker.domain.User;
 import com.mhong.jobtracker.dto.request.UserLoginRequest;
 import com.mhong.jobtracker.dto.request.UserRegistrationRequest;
 import com.mhong.jobtracker.dto.response.UserRegistrationResponse;
-import com.mhong.jobtracker.service.UserService;
+import com.mhong.jobtracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService service;
+    private final AuthService service;
 
-    public AuthController(UserService service) {
+    public AuthController(AuthService service) {
         this.service = service;
     }
 
