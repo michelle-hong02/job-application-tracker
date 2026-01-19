@@ -24,7 +24,8 @@ public class JobApplicationController {
 
     // Create job application
     @PostMapping
-    public ResponseEntity<ApplicationResponse> create(@Valid  @RequestBody CreateApplicationRequest request){    JobApplication app = service.createApplication(request);
+    public ResponseEntity<ApplicationResponse> create(@Valid  @RequestBody CreateApplicationRequest request)
+    { JobApplication app = service.createApplication(request);
         return ResponseEntity
                 .created(URI.create("/applications/" + app.getId())) // 201 Created
                 .body(ApplicationResponse.fromEntity(app));

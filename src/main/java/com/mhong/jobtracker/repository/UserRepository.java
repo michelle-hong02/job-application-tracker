@@ -4,6 +4,8 @@ import com.mhong.jobtracker.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     // save(entity) - saves entity
@@ -13,5 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // deleteById(id) - deletes by ID
     // existsById(id) - checks if an entity exists
 
-    public boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 }
