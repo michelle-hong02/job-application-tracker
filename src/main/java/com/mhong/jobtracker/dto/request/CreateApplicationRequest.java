@@ -1,18 +1,12 @@
 package com.mhong.jobtracker.dto.request;
 
 import com.mhong.jobtracker.domain.ApplicationStatus;
-import com.mhong.jobtracker.domain.JobApplication;
-import com.mhong.jobtracker.domain.User;
 import com.mhong.jobtracker.domain.WorkType;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class CreateApplicationRequest {
-
-    @NotNull
-    private Long userId;
 
     @NotNull
     @NotBlank
@@ -41,11 +35,10 @@ public class CreateApplicationRequest {
     public CreateApplicationRequest() {}
 
     // All-args constructor
-    public CreateApplicationRequest(Long userId, String company, String role,
+    public CreateApplicationRequest(String company, String role,
                                     LocalDate applyDate, ApplicationStatus status,
                                     WorkType workType, Double salaryMin,
                                     Double salaryMax, String notes) {
-        this.userId = userId;
         this.company = company;
         this.role = role;
         this.applyDate = applyDate;
@@ -59,8 +52,6 @@ public class CreateApplicationRequest {
 
     // Getters and setters
     // Note: Spring requires setters to populate the object when deserializing JSON from a request body
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
 
     public String getCompany() { return company; }
     public void setCompany(String company) { this.company = company; }

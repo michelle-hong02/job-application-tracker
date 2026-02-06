@@ -1,6 +1,5 @@
 package com.mhong.jobtracker.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserRegistrationRequest {
@@ -12,8 +11,7 @@ public class UserRegistrationRequest {
     private String lastName;
 
     @NotBlank
-    @Email
-    private String email;
+    private String username;
 
     @NotBlank
     private String password;
@@ -22,10 +20,10 @@ public class UserRegistrationRequest {
     public UserRegistrationRequest() {}
 
     // All-args constructor
-    public UserRegistrationRequest(String firstName, String lastName, String email, String password) {
+    public UserRegistrationRequest(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.username = username;
         this.password = password;
     }
 
@@ -37,8 +35,8 @@ public class UserRegistrationRequest {
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}

@@ -34,9 +34,9 @@ public class GlobalExceptionHandler {
         return body;
     }
 
-    @ExceptionHandler(EmailNotAvailableException.class)
+    @ExceptionHandler(UsernameNotAvailableException.class)
     @ResponseStatus(HttpStatus.CONFLICT) // 409
-    public Map<String, Object> handleEmailNotAvailable(EmailNotAvailableException ex) {
+    public Map<String, Object> handleUsernameNotAvailable(UsernameNotAvailableException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("status", HttpStatus.CONFLICT.value());
         body.put("error", "Conflict");
@@ -53,5 +53,16 @@ public class GlobalExceptionHandler {
                 errors.put(error.getField(), error.getDefaultMessage()));
         return errors;
     }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN) // 403
+    public Map<String, Object> handleUnauthorizedAccess(UnauthorizedAccessException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.FORBIDDEN.value());
+        body.put("error", "Forbidden");
+        body.put("message", ex.getMessage());
+        return body;
+    }
+
 
 }

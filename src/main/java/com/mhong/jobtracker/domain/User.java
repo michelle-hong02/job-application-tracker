@@ -7,21 +7,24 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
-    @Column(unique = true)
-    private String email;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
     private String passwordHash;
 
     //protected no-args constructor for JPA
     protected User(){}
 
-    public User(String firstName, String lastName, String email, String passwordHash){
+    public User(String firstName, String lastName, String username, String passwordHash){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.username = username;
         this.passwordHash = passwordHash;
     }
 
@@ -35,8 +38,8 @@ public class User {
     public String getLastName() {return lastName;}
     public void setLastName(String lastName) {this.lastName = lastName;}
 
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public String getUsername() {return username;}
+    public void setUsername(String username) {this.username = username;}
 
     public String getPasswordHash() {return passwordHash;}
     public void setPasswordHash(String passwordHash) {this.passwordHash = passwordHash;}

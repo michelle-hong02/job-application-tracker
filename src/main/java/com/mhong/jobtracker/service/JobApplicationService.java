@@ -1,6 +1,7 @@
 package com.mhong.jobtracker.service;
 
 import com.mhong.jobtracker.exception.ApplicationNotFoundException;
+import com.mhong.jobtracker.exception.UnauthorizedAccessException;
 import com.mhong.jobtracker.exception.UserNotFoundException;
 import com.mhong.jobtracker.domain.ApplicationStatus;
 import com.mhong.jobtracker.domain.JobApplication;
@@ -36,10 +37,7 @@ public class JobApplicationService {
         if (notes != null) app.setNotes(notes);
     }
 
-    public JobApplication createApplication(CreateApplicationRequest request) {
-
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
+    public JobApplication createApplication(User user, CreateApplicationRequest request) {
 
         JobApplication app = new JobApplication(user, request.getCompany(), request.getRole());
 
@@ -51,10 +49,18 @@ public class JobApplicationService {
 
     }
 
-    public JobApplication updateApplication(UpdateApplicationRequest request) {
+    public JobApplication updateApplication(User user, UpdateApplicationRequest request) {
+
+        // Fetch the application
         JobApplication app = repo.findById(request.getAppId())
                 .orElseThrow(() -> new ApplicationNotFoundException(request.getAppId()));
 
+        // Ownership check: only the owner can update
+        if (!app.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("You do not have permission to update this application");
+        }
+
+        // Updates fields if provided
         if (request.getCompany() != null) app.setCompany(request.getCompany());
         if (request.getRole() != null) app.setRole(request.getRole());
         setOptionalFields(app, request.getApplyDate(), request.getStatus(), request.getWorkType(), request.getSalaryMin(), request.getSalaryMax(), request.getNotes());
@@ -62,10 +68,8 @@ public class JobApplicationService {
         return repo.save(app); // persist changes
     }
 
-    public List<JobApplication> getAllApplications(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        return repo.findAllByUserId(userId);
+    public List<JobApplication> getAllApplications(User user) {
+        return repo.findAllByUserId(user.getId());
     }
 
     public JobApplication getApplicationById(Long id){
@@ -73,11 +77,14 @@ public class JobApplicationService {
                .orElseThrow(() -> new ApplicationNotFoundException(id));
     }
 
-    public void deleteApplication(Long id){
+    public void deleteApplication(User user, Long appId) {
+        JobApplication app = repo.findById(appId)
+                .orElseThrow(() -> new ApplicationNotFoundException(appId));
 
-        repo.findById(id)
-                .orElseThrow(() -> new ApplicationNotFoundException(id));
-        repo.deleteById(id);
+        if (!app.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("You do not have permission to delete this application");
+        }
 
+        repo.delete(app);
     }
 }
