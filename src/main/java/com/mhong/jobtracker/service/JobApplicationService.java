@@ -72,15 +72,26 @@ public class JobApplicationService {
         return repo.findAllByUserId(user.getId());
     }
 
-    public JobApplication getApplicationById(Long id){
-       return repo.findById(id)
+    public JobApplication getApplicationById(User user, Long id){
+
+        // Fetch the application
+        JobApplication app = repo.findById(id)
                .orElseThrow(() -> new ApplicationNotFoundException(id));
+
+        // Ownership check: only the owner can access app
+        if (!app.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedAccessException("You do not have permission to view this application");
+        }
+        else {
+            return app;
+        }
     }
 
     public void deleteApplication(User user, Long appId) {
         JobApplication app = repo.findById(appId)
                 .orElseThrow(() -> new ApplicationNotFoundException(appId));
 
+        // Ownership check: only the owner can delete the app
         if (!app.getUser().getId().equals(user.getId())) {
             throw new UnauthorizedAccessException("You do not have permission to delete this application");
         }

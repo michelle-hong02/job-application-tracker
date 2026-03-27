@@ -39,9 +39,6 @@ public class AuthController {
     }
 
     // Login user
-    // NOTE: right now login is only doing authentication not authorization
-    // so RIGHT NOW returning 200 OK wiht no body is fine
-    // nothing meaningful to return until you issue a JWT
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody UserLoginRequest request) {

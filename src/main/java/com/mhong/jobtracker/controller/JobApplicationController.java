@@ -45,8 +45,11 @@ public class JobApplicationController {
 
     // Get job application by appId
     @GetMapping("/{id}")
-    public ApplicationResponse get(@PathVariable Long id){
-        return ApplicationResponse.fromEntity(service.getApplicationById(id));
+    public ApplicationResponse get(@PathVariable Long id,
+                                   Authentication authentication
+    ){
+        User user = userService.getUserByUsername((authentication.getName()));
+        return ApplicationResponse.fromEntity(service.getApplicationById(user, id));
     }
 
     // Update existing job application
