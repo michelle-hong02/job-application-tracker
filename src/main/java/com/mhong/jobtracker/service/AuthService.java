@@ -8,8 +8,10 @@ import com.mhong.jobtracker.exception.UsernameNotAvailableException;
 import com.mhong.jobtracker.repository.UserRepository;
 import com.mhong.jobtracker.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,12 +52,17 @@ public class AuthService {
     }
 
     public Authentication authenticate(UserLoginRequest request) {
-        // Spring calls UserDetailsService, checks password
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try {
+            // Spring calls UserDetailsService, checks password
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException ex) {
+            // Wrap Spring Security exceptions in a clean BadCredentialsException
+            throw new BadCredentialsException("Invalid username or password");
+        }
     }
 }
