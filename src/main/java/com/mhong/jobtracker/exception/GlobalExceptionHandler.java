@@ -50,11 +50,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
     public ApiError handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.warn("Validation failed: {}", ex.getMessage());
+
+        // Build a string of all field errors
+        StringBuilder fieldErrors = new StringBuilder();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                fieldErrors.append(error.getField())
+                        .append(": ")
+                        .append(error.getDefaultMessage())
+                        .append("; ")
+        );
+
+        String errorMessage = fieldErrors.toString().trim();
+
+        // Log each field error
+        log.warn("Validation failed for fields: {}", errorMessage);
+
         return new ApiError(
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
-                ex.getMessage()
+                errorMessage
         );
     }
 
