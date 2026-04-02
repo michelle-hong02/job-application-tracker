@@ -42,7 +42,12 @@ public class SecurityConfig {
             //
             .authorizeHttpRequests(auth -> auth
                 //public endpoints
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**",
+                        //Allowing swagger
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**"
+                        )
+                    .permitAll()
 
                 // All other endpoints require authentication
                 .anyRequest().authenticated()
