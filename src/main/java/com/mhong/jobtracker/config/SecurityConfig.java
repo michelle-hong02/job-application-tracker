@@ -2,6 +2,7 @@ package com.mhong.jobtracker.config;
 
 import com.mhong.jobtracker.security.CustomUserDetailsService;
 import com.mhong.jobtracker.security.JwtAuthFilter;
+import com.mhong.jobtracker.security.JwtAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +19,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
 
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthFilter jwtAuthFilter;
     private final CustomUserDetailsService userDetailsService;
 
     // Constructor injection for required dependencies
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+    public SecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+                          JwtAuthFilter jwtAuthFilter,
                           CustomUserDetailsService userDetailsService) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAuthFilter = jwtAuthFilter;
         this.userDetailsService = userDetailsService;
     }
@@ -58,6 +62,9 @@ public class SecurityConfig {
 
             // Set custom authentication provider
             .authenticationProvider(authenticationProvider())
+
+            // Handles exceptions thrown from jwtAuthFilter
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
 
             // Add JWT filter before Spring Security's default filter
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

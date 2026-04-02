@@ -13,4 +13,10 @@ public class ApiError {
         this.message = message;
         this.timestamp = System.currentTimeMillis();
     }
+
+    // Getters for Spring json serialization
+    public int getStatus() { return status; }
+    public String getError() { return error; }
+    public String getMessage() { return message; }
+    public long getTimestamp() { return timestamp; }
 }
