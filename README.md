@@ -41,13 +41,14 @@ It provides JWT-based authentication, PostgreSQL persistence, and a fully contai
 
 This is the easiest way to run the full stack (API + database).
 
-### 1. Create environment variables
+### 1. Clone the repository
 
-Create a `.env` file in the project root:
-
-```env
-JWT_SECRET=your-base64-encoded-secret
+```bash
+git clone https://github.com/your-username/job-tracker.git
+cd job-tracker
 ```
+
+### 2. Create environment variables
 
 Generate a secure secret using:
 
@@ -55,13 +56,19 @@ Generate a secure secret using:
 openssl rand -base64 32
 ```
 
-### 2. Start the application
+Create a `.env` file in the project root:
+
+```env
+JWT_SECRET=your-base64-encoded-secret
+```
+
+### 3. Start the application
 
 ```bash
 docker compose up --build
 ```
 
-### 3. Access the application
+### 4. Access the application
 
 - **API Base URL:** `http://localhost:8080`
 - **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
@@ -70,7 +77,14 @@ docker compose up --build
 
 ## Run Locally (Without Docker)
 
-### 1. Configure PostgreSQL
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/job-tracker.git
+cd job-tracker
+```
+
+### 2. Configure PostgreSQL
 
 Ensure PostgreSQL is running locally and create the database:
 
@@ -78,13 +92,13 @@ Ensure PostgreSQL is running locally and create the database:
 CREATE DATABASE jobtracker;
 ```
 
-### 2. Set environment variable
+### 3. Set environment variable
 
 ```bash
 export JWT_SECRET=your-base64-encoded-secret
 ```
 
-### 3. Configure application properties
+### 4. Configure application properties
 
 Update your `application.properties` (or `application.yml`):
 
@@ -94,7 +108,7 @@ spring.datasource.username=jobtracker
 spring.datasource.password=jobtracker
 ```
 
-### 4. Run the application
+### 5. Run the application
 
 ```bash
 ./gradlew bootRun
