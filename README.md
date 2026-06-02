@@ -73,6 +73,13 @@ docker compose up --build
 - **API Base URL:** `http://localhost:8080`
 - **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
 
+### Stop the application
+
+To stop the running containers:
+
+```bash
+docker compose down
+```
 ---
 
 ## Run Locally (Without Docker)
