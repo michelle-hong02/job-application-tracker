@@ -1,93 +1,124 @@
 # Job Tracker API
 
-A backend service for tracking job applications, built with Spring Boot.
-Supports user authentication, JWT-based security, and CRUD operations for managing applications.
+A backend service for tracking job applications built with Spring Boot.  
+It provides JWT-based authentication, PostgreSQL persistence, and a fully containerized development environment using Docker and Docker Compose.
 
 ---
 
 ## Tech Stack
 
-* Java 17
-* Spring Boot
-* Spring Security (JWT Authentication)
-* Spring Data JPA
-* PostgreSQL
-* Swagger / OpenAPI (API documentation)
-* Docker
+- Java 17
+- Spring Boot
+- Spring Security (JWT Authentication)
+- Spring Data JPA
+- PostgreSQL
+- Swagger / OpenAPI
+- Docker & Docker Compose
+
 ---
 
-## ⚙️ Features
+## Features
 
-- Track and manage job applications
 - User registration and login
 - JWT-based authentication
-- Secure REST API endpoints
+- Create, read, update, and delete (CRUD) job applications
+- User-specific application tracking
 - Input validation and global exception handling
-- Swagger UI for API testing
+- Interactive API documentation via Swagger UI
 
 ---
 
-## 🏃 How to Run Locally
+## Getting Started
 
-### 1. Clone the repository
+### Prerequisites
 
-```bash
-git clone https://github.com/your-username/job-tracker.git
-cd job-tracker
+- Docker & Docker Compose (recommended)
+- OR Java 17 + PostgreSQL (for local setup)
+
+---
+
+## Run with Docker (Recommended)
+
+This is the easiest way to run the full stack (API + database).
+
+### 1. Create environment variables
+
+Create a `.env` file in the project root:
+
+```env
+JWT_SECRET=your-base64-encoded-secret
 ```
 
-### 2. Configure environment variables
+Generate a secure secret using:
 
-Update your `application.yml` or `application.properties`:
+```bash
+openssl rand -base64 32
+```
+
+### 2. Start the application
+
+```bash
+docker compose up --build
+```
+
+### 3. Access the application
+
+- **API Base URL:** `http://localhost:8080`
+- **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
+
+---
+
+## Run Locally (Without Docker)
+
+### 1. Configure PostgreSQL
+
+Ensure PostgreSQL is running locally and create the database:
+
+```sql
+CREATE DATABASE jobtracker;
+```
+
+### 2. Set environment variable
+
+```bash
+export JWT_SECRET=your-base64-encoded-secret
+```
+
+### 3. Configure application properties
+
+Update your `application.properties` (or `application.yml`):
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/jobtracker
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-jwt.secret=your_jwt_secret
+spring.datasource.username=jobtracker
+spring.datasource.password=jobtracker
 ```
 
-### 3. Run the application
+### 4. Run the application
 
 ```bash
 ./gradlew bootRun
 ```
 
-App will start at:
+---
 
-```
-http://localhost:8080
-```
+## API Documentation
+
+Swagger UI is available at: `http://localhost:8080/swagger-ui/index.html`
+
+It provides interactive access to test all endpoints directly from your browser.
 
 ---
 
-## 📘 API Documentation (Swagger)
+## Authentication
 
-Once the app is running, access Swagger UI:
+This API uses JWT-based authentication.
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+### Endpoints
+- **Register:** `POST /auth/register`
+- **Login:** `POST /auth/login`
 
----
-
-## 🔐 Authentication
-
-This API uses JWT authentication.
-
-### 1. Register
-
-```
-POST /auth/register
-```
-
-### 2. Login
-
-```
-POST /auth/login
-```
-
-Response:
+**Example response:**
 
 ```json
 {
@@ -96,58 +127,50 @@ Response:
 }
 ```
 
-### 3. Use token in requests
+### Using the Token
 
-Add header:
+For protected endpoints, include the JWT in the request header:
 
-```
+```http
 Authorization: Bearer <your_token>
 ```
 
 ---
 
-## 📌 Example API Calls
+## Job Application Endpoints
 
-### Get current user's applications
-
-```
-GET /applications/me
-```
-
-Header:
-
-```
-Authorization: Bearer <your_token>
-```
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| **GET** | `/applications/me` | Get current user's applications |
+| **POST** | `/applications` | Create a new application |
+| **PUT** | `/applications/{id}` | Update an existing application |
+| **DELETE** | `/applications/{id}` | Delete an application |
 
 ---
 
-## ❗ Error Handling
+## Error Handling
 
-All errors follow a consistent format:
+All API errors follow a consistent structure:
 
 ```json
 {
   "status": 401,
   "error": "Unauthorized",
-  "message": "Invalid username or password",
+  "message": "Invalid credentials",
   "timestamp": 1712312312312
 }
 ```
 
 ---
 
-## 🐳 Run with Docker
+## Notes
 
-Make sure Docker is installed, then run:
-
-```
-docker-compose up --build
-```
-
+- Swagger UI is enabled by default via SpringDoc.
+- PostgreSQL runs in a Docker container when using Docker Compose.
+- JWT secrets must be Base64-encoded for HS256 signing.
 
 ---
 
-## 📄 License
+## License
 
 This project is for educational and portfolio purposes.
